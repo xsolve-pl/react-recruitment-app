@@ -10,7 +10,8 @@
     "confirm-delete-card": "Are you sure you want to delete?",
     "remaining-votes": "Remaining votes",
     "previous-step": "Go back to the previous step",
-    "next-step": "Proceed to the next step of the meeting"
+    "next-step": "Proceed to the next step of the meeting",
+    "group-cards": "Are you sure you want to combine the cards?"
   },
   "retro-steps": {
     "write": "Write your thoughts",

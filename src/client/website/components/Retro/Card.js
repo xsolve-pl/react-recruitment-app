@@ -88,6 +88,13 @@ class Card extends Component {
     }
   };
 
+  handleDrop = (ev) => {
+    const { card, openGroupCardDialog } = this.props;
+    ev.stopPropagation();
+    const from = JSON.parse(ev.dataTransfer.getData('card'));
+    if (from.id !== card.id) openGroupCardDialog({ from, to: card });
+  };
+
   handelDragStart = (ev) => {
     const { card } = this.props;
     const cardData = JSON.stringify(card);
@@ -102,6 +109,8 @@ class Card extends Component {
       <div
         draggable={!isEditing}
         onDragStart={this.handelDragStart}
+        onDragOver={e => e.preventDefault()}
+        onDrop={this.handleDrop}
       >
         <MaterialCard className={classes.card}>
           <CardContent key="content">
@@ -184,6 +193,7 @@ Card.propTypes = {
     authors: PropTypes.arrayOf(PropTypes.object).isRequired
   }).isRequired,
   // Functions
+  openGroupCardDialog: PropTypes.func.isRequired,
   editCard: PropTypes.func.isRequired,
   removeCard: PropTypes.func.isRequired,
   addMessage: PropTypes.func.isRequired,

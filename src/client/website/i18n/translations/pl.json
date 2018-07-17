@@ -10,7 +10,8 @@
     "confirm-delete-card": "Czy na pewno chcesz usunąć?",
     "remaining-votes": "Pozostało głosów",
     "previous-step": "Wróć do poprzedniego etapu spotkania",
-    "next-step": "Przejdź do kolejnego etapu spotkania"
+    "next-step": "Przejdź do kolejnego etapu spotkania",
+    "group-cards": "Czy na pewno chcesz połączyć kartki?"
   },
   "retro-steps": {
     "write": "Zgłoś swoje spostrzeżenia",
