@@ -11,7 +11,8 @@ import {
   RETRO_RECEIVED,
   RETRO_EDIT_FAILURE,
   RETRO_EDIT_IN_PROGRESS,
-  RETRO_EDIT_SUCCESS
+  RETRO_EDIT_SUCCESS,
+  RETRO_TOGGLE_SORT
 } from '../actions/retro';
 import {
   COLUMN_ADD_FAILURE,
@@ -67,6 +68,7 @@ export const CARD_REMOVE_QUERY_KEY = 'removeCard';
 export const CARD_EDIT_QUERY_KEY = 'editCard';
 export const CARD_VOTES_KEY = 'votes';
 export const STEPS_CHANGE_QUERY_KEY = 'stepChange';
+export const RETRO_SORT_BY_VOTES = 'sortByVotes';
 
 // ------------------------------------
 // Reducer`
@@ -89,10 +91,16 @@ const initialState = {
   [CARD_ADD_QUERY_KEY]: QUERY_DEFAULT(),
   [CARD_REMOVE_QUERY_KEY]: QUERY_DEFAULT(),
   [CARD_EDIT_QUERY_KEY]: QUERY_DEFAULT(),
-  [STEPS_CHANGE_QUERY_KEY]: QUERY_DEFAULT()
+  [STEPS_CHANGE_QUERY_KEY]: QUERY_DEFAULT(),
+  [RETRO_SORT_BY_VOTES]: false
 };
 
 const ACTION_HANDLERS = {
+  [RETRO_TOGGLE_SORT]: (state) => {
+    const newState = deepClone(state);
+    newState[RETRO_SORT_BY_VOTES] = !newState[RETRO_SORT_BY_VOTES];
+    return newState;
+  },
   ...handleQuery([
     RETRO_JOIN_IN_PROGRESS,
     {

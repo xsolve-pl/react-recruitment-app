@@ -22,6 +22,7 @@ import {
 import Column from '../../containers/Retro/Column';
 import Steps from '../../containers/Retro/Steps';
 import { initialsOf } from '../../services/utils/initials';
+import ControlPanel from '../../containers/Retro/ControlPanel';
 
 class Retro extends Component {
   componentWillMount() {
@@ -61,6 +62,7 @@ class Retro extends Component {
         return (
           <div className={classes.root}>
             <Steps />
+            <ControlPanel />
             <div className={classes.columns}>
               {columns.map(column => (
                 <Column key={column.id} column={column} />

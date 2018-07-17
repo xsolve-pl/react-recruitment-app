@@ -32,6 +32,8 @@ class Column extends Component {
     this.setState({ text: e.target.value });
   };
 
+  sortCards = (a, b) => b.votes.length - a.votes.length;
+
   handleDrop = (e) => {
     const { socket } = this.context;
     const { column: { id: currentColumnId }, editCard } = this.props;
@@ -44,8 +46,9 @@ class Column extends Component {
   };
 
   render() {
-    const { column, cards, classes } = this.props;
-
+    const { column, cards, classes, sort } = this.props;
+    const columnCards = cards.filter(card => column.id === card.columnId);
+    const renderedCards = sort ? columnCards.sort(this.sortCards) : columnCards;
     return (
       <div
         className={classes.column}
@@ -63,7 +66,7 @@ class Column extends Component {
             <PlaylistAdd className={classes.actionIcon} />
           </IconButton>
         </div>
-        {cards.filter(card => column.id === card.columnId).map(card => (
+        {renderedCards.map(card => (
           <Card card={card} key={card.id} />
         ))}
       </div>
@@ -77,6 +80,7 @@ Column.contextTypes = {
 
 Column.propTypes = {
   // Values
+  sort: PropTypes.bool.isRequired,
   column: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
