@@ -13,7 +13,7 @@ import {
 } from '../../reducers/retro';
 import { cardEdit, cardRemove } from '../../actions/card';
 import { USER_ID_KEY } from '../../reducers/user';
-import { addMessage } from '../../actions/layout';
+import { addMessage, openGroupCardDialog } from '../../actions/layout';
 import { getUserSubmittedVotes } from '../../selectors/votes';
 
 
@@ -29,6 +29,7 @@ const mapStateToProps = ({ retro, user }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  openGroupCardDialog: cardData => dispatch(openGroupCardDialog(true, cardData)),
   editCard: (socket, card) => dispatch(cardEdit(socket, card)),
   removeCard: (socket, cardId) => dispatch(cardRemove(socket, cardId)),
   addMessage: message => dispatch(addMessage(message))

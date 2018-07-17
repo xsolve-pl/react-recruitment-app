@@ -14,6 +14,7 @@ import ConnectingDialog from '../ConnectingDialog';
 import ChangeNameDialog from '../ChangeNameDialog';
 import Notifications from '../../containers/Notifications';
 import LocaleProvider from '../../i18n/LocaleProvider';
+import GroupCardsDialog from '../GroupCardsDialog';
 
 export const AppContainer = ({ store, ...rest }) => (
   <Provider store={store}>
@@ -27,6 +28,7 @@ export const AppContainer = ({ store, ...rest }) => (
               dialogChildren={[
                 <ConnectingDialog key="connectingDialog" />,
                 <ChangeNameDialog key="changeNameDialog" />,
+                <GroupCardsDialog hey="groupCardsDialog" />,
                 <Notifications key="notifications" />
               ]}
             >

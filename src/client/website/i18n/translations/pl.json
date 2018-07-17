@@ -11,7 +11,8 @@
     "remaining-votes": "Pozostało głosów",
     "previous-step": "Wróć do poprzedniego etapu spotkania",
     "next-step": "Przejdź do kolejnego etapu spotkania",
-    "sort-by-votes": "Sortuj po głosach"
+    "sort-by-votes": "Sortuj po głosach",
+    "group-cards": "Czy na pewno chcesz połączyć kartki?"
   },
   "retro-steps": {
     "write": "Zgłoś swoje spostrzeżenia",
