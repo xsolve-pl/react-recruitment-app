@@ -12,6 +12,8 @@
     "previous-step": "Wróć do poprzedniego etapu spotkania",
     "next-step": "Przejdź do kolejnego etapu spotkania",
     "sort-by-votes": "Sortuj po głosach",
+    "filter-cards": "Wyszukaj",
+    "export": "Eksportuj dane",
     "group-cards": "Czy na pewno chcesz połączyć kartki?"
   },
   "retro-steps": {

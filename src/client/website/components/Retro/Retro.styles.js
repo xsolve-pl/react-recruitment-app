@@ -39,6 +39,13 @@ const styles = theme => ({
   },
   hidden: {
     display: 'none'
+  },
+  exportButton: {
+    position: 'fixed',
+    right: 20,
+    bottom: 100,
+    background: theme.palette.greyBlue,
+    color: theme.palette.lightGrey
   }
 });
 

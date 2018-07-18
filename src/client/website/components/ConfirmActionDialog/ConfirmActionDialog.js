@@ -37,7 +37,13 @@ class ConfirmActionDialog extends Component {
             <Button onClick={this.handleClose} color="primary">
               {cancelButtonText || <FormattedMessage id="navigation.cancel" />}
             </Button>
-            <Button onClick={onConfirm} color="primary">
+            <Button
+              onClick={() => {
+                onConfirm();
+                this.handleClose();
+              }}
+              color="primary"
+            >
               {confirmButtonText || <FormattedMessage id="navigation.ok" />}
             </Button>
           </DialogActions>

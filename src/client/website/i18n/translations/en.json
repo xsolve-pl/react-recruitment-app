@@ -12,7 +12,9 @@
     "previous-step": "Go back to the previous step",
     "next-step": "Proceed to the next step of the meeting",
     "sort-by-votes": "Sort by votes",
-    "group-cards": "Are you sure you want to combine the cards?"
+    "group-cards": "Are you sure you want to combine the cards?",
+    "filter-cards": "Search",
+    "export": "Export"
   },
   "retro-steps": {
     "write": "Write your thoughts",

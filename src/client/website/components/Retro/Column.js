@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Typography } from 'material-ui';
 import PlaylistAdd from 'material-ui-icons/PlaylistAdd';
+import VisibilityOff from 'material-ui-icons/VisibilityOff';
+import Visibility from 'material-ui-icons/Visibility';
 import Card from '../../containers/Retro/Card';
 import { QUERY_ERROR_KEY, queryFailed, QueryShape } from '../../services/websocket/query';
 
@@ -28,6 +30,11 @@ class Column extends Component {
     this.setState({ text: '' });
   };
 
+  hideColumn = () => {
+    const { column, hideColumn } = this.props;
+    hideColumn(column.name);
+  };
+
   handleTextChange = (e) => {
     this.setState({ text: e.target.value });
   };
@@ -46,9 +53,12 @@ class Column extends Component {
   };
 
   render() {
-    const { column, cards, classes, sort } = this.props;
+    const { column, cards, classes, sort, filterCardsBy, hiddenColumns } = this.props;
     const columnCards = cards.filter(card => column.id === card.columnId);
-    const renderedCards = sort ? columnCards.sort(this.sortCards) : columnCards;
+    const cardsFilteredByTerm = filterCardsBy ?
+      columnCards.filter(card => card.text.indexOf(filterCardsBy) > -1) :
+      columnCards;
+    const renderedCards = sort ? cardsFilteredByTerm.sort(this.sortCards) : cardsFilteredByTerm;
     return (
       <div
         className={classes.column}
@@ -62,13 +72,31 @@ class Column extends Component {
             onDoubleClick={this.startEditing}
           >{column.name}
           </Typography>
-          <IconButton className={classes.addCardIcon} onClick={this.addCard}>
-            <PlaylistAdd className={classes.actionIcon} />
-          </IconButton>
+          <div>
+            <IconButton className={classes.addCardIcon} onClick={this.addCard}>
+              <PlaylistAdd className={classes.actionIcon} />
+            </IconButton>
+            {(!hiddenColumns[column.name] ||
+            hiddenColumns[column.name] === undefined) &&
+            <IconButton className={classes.addCardIcon} onClick={this.hideColumn}>
+              <VisibilityOff className={classes.actionIcon} />
+            </IconButton>}
+            {
+              hiddenColumns[column.name] &&
+              <IconButton className={classes.addCardIcon} onClick={this.hideColumn}>
+                <Visibility className={classes.actionIcon} />
+              </IconButton>
+            }
+          </div>
         </div>
-        {renderedCards.map(card => (
-          <Card card={card} key={card.id} />
-        ))}
+        {
+          (
+            !hiddenColumns[column.name] ||
+            hiddenColumns[column.name] === undefined
+          ) &&
+          renderedCards.map(card => (
+            <Card card={card} key={card.id} />
+          ))}
       </div>
     );
   }
@@ -80,6 +108,8 @@ Column.contextTypes = {
 
 Column.propTypes = {
   // Values
+  hiddenColumns: PropTypes.object.isRequired,
+  filterCardsBy: PropTypes.string.isRequired,
   sort: PropTypes.bool.isRequired,
   column: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -91,6 +121,7 @@ Column.propTypes = {
     text: PropTypes.string.isRequired
   })).isRequired,
   // Functions
+  hideColumn: PropTypes.func.isRequired,
   editCard: PropTypes.func.isRequired,
   addCard: PropTypes.func.isRequired,
   addMessage: PropTypes.func.isRequired,
