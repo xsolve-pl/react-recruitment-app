@@ -12,7 +12,9 @@ import {
   RETRO_EDIT_FAILURE,
   RETRO_EDIT_IN_PROGRESS,
   RETRO_EDIT_SUCCESS,
-  RETRO_TOGGLE_SORT
+  RETRO_TOGGLE_SORT,
+  RETRO_TOGGLE_COLUMN_HIDE,
+  RETRO_FILTER_CARDS
 } from '../actions/retro';
 import {
   COLUMN_ADD_FAILURE,
@@ -69,11 +71,15 @@ export const CARD_EDIT_QUERY_KEY = 'editCard';
 export const CARD_VOTES_KEY = 'votes';
 export const STEPS_CHANGE_QUERY_KEY = 'stepChange';
 export const RETRO_SORT_BY_VOTES = 'sortByVotes';
+export const RETRO_HIDDEN_COLUMNS = 'hiddenColumns';
+export const RETRO_FILTER_TERM = 'searchTerm';
 
 // ------------------------------------
 // Reducer`
 // ------------------------------------
 const initialState = {
+  [RETRO_FILTER_TERM]: '',
+  [RETRO_HIDDEN_COLUMNS]: {},
   [RETRO_ID_KEY]: undefined,
   [RETRO_NAME_KEY]: undefined,
   [RETRO_SHARE_ID_KEY]: undefined,
@@ -96,6 +102,20 @@ const initialState = {
 };
 
 const ACTION_HANDLERS = {
+  [RETRO_FILTER_CARDS]: (state, { searchTerm }) => {
+    const newState = deepClone(state);
+    newState[RETRO_FILTER_TERM] = searchTerm;
+    return newState;
+  },
+  [RETRO_TOGGLE_COLUMN_HIDE]: (state, { payload }) => {
+    const newState = deepClone(state);
+    if (!newState[RETRO_HIDDEN_COLUMNS][payload]) {
+      newState[RETRO_HIDDEN_COLUMNS][payload] = true;
+    } else {
+      newState[RETRO_HIDDEN_COLUMNS][payload] = !newState[RETRO_HIDDEN_COLUMNS][payload];
+    }
+    return newState;
+  },
   [RETRO_TOGGLE_SORT]: (state) => {
     const newState = deepClone(state);
     newState[RETRO_SORT_BY_VOTES] = !newState[RETRO_SORT_BY_VOTES];

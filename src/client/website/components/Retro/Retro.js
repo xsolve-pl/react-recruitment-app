@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { Parser } from 'json2csv';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import {
   Avatar,
   Button,
@@ -7,8 +9,10 @@ import {
   CardActions,
   CardContent,
   Tooltip,
-  Typography
+  Typography,
+  IconButton
 } from 'material-ui';
+import CloudDownload from 'material-ui-icons/CloudDownload';
 import { CircularProgress } from 'material-ui/Progress';
 import {
   QUERY_ERROR_KEY,
@@ -23,6 +27,7 @@ import Column from '../../containers/Retro/Column';
 import Steps from '../../containers/Retro/Steps';
 import { initialsOf } from '../../services/utils/initials';
 import ControlPanel from '../../containers/Retro/ControlPanel';
+import ConfirmActionDialog from '../../containers/ConfirmActionDialog';
 
 class Retro extends Component {
   componentWillMount() {
@@ -40,6 +45,28 @@ class Retro extends Component {
     }
   }
 
+  createCSV = () => {
+    const { cards, shareId } = this.props;
+    const filename = `${shareId}.csv`;
+    const fields = Object.keys(cards[0]);
+    const json2Csv = new Parser({ fields });
+    const blob = new Blob([json2Csv.parse(cards)], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+      navigator.msSaveBlob(blob, filename);
+    } else {
+      const link = document.createElement('a');
+      if (link.download !== undefined) { // feature detection
+        // Browsers that support HTML5 download attribute
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  };
   joinRetro = () => {
     const { joinRetro, match: { params: { retroShareId } } } = this.props;
     const { socket } = this.context;
@@ -48,6 +75,7 @@ class Retro extends Component {
 
   render() {
     const {
+      step,
       classes,
       columns,
       users,
@@ -68,6 +96,25 @@ class Retro extends Component {
                 <Column key={column.id} column={column} />
               ))}
             </div>
+            {
+              step &&
+              <ConfirmActionDialog
+                key="export-data"
+                TriggeringComponent={({ onClick }) => (
+                  <IconButton
+                    key="download"
+                    raised
+                    size="big"
+                    color="primary"
+                    className={classes.exportButton}
+                  >
+                    <CloudDownload onClick={onClick} />
+                  </IconButton>
+                )}
+                textContent={<FormattedMessage id="retro.confirm-delete-card" />}
+                onConfirm={this.createCSV}
+              />
+            }
             <div className={classes.users}>
               {Object.values(users).map(({ id, name }) => (
                 <Tooltip key={id} title={name} placement="left">
@@ -114,12 +161,18 @@ Retro.contextTypes = {
 
 Retro.propTypes = {
   // Values
+  shareId: PropTypes.string.isRequired,
+  step: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       retroShareId: PropTypes.string.isRequired
     }).isRequired
   }).isRequired,
+  cards: PropTypes.arrayOf(PropTypes.shape({
+    columnId: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  })).isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired
@@ -139,7 +192,8 @@ Retro.propTypes = {
     messageCard: PropTypes.string.isRequired,
     columns: PropTypes.string.isRequired,
     users: PropTypes.string.isRequired,
-    hidden: PropTypes.string.isRequired
+    hidden: PropTypes.string.isRequired,
+    exportButton: PropTypes.string.isRequired
   }).isRequired
 };
 
