@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { Switch, TextField, FormControlLabel } from 'material-ui';
 import { FormattedMessage } from 'react-intl';
 
+const SEARCH_TERM_MIN_LENGTH = 2;
+
 class ControlPanel extends Component {
   handleChange = (ev) => {
     const { filterCardsBy } = this.props;
     const searchTerm = ev.target.value;
-    if (searchTerm.length >= 2) {
+    if (searchTerm.length >= SEARCH_TERM_MIN_LENGTH) {
       filterCardsBy(searchTerm);
     } else {
       filterCardsBy();
