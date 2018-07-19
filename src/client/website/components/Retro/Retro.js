@@ -111,7 +111,7 @@ class Retro extends Component {
                     <CloudDownload onClick={onClick} />
                   </IconButton>
                 )}
-                textContent={<FormattedMessage id="retro.confirm-delete-card" />}
+                textContent={<FormattedMessage id="retro.export" />}
                 onConfirm={this.createCSV}
               />
             }
