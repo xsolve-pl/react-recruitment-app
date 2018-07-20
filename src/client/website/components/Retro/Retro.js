@@ -46,11 +46,22 @@ class Retro extends Component {
   }
 
   createCSV = () => {
-    const { cards, shareId } = this.props;
+    const { cards, columns, shareId } = this.props;
+    const dataToCSV = columns.reduce((data, currentColumn) => {
+      const columnCards = cards.filter(card => card.columnId === currentColumn.id);
+      columnCards.forEach((card) => {
+        data.push({
+          columnName: currentColumn.name,
+          cardText: card.text,
+          votesNumber: card.votes.length
+        });
+      });
+      return data;
+    }, []);
     const filename = `${shareId}.csv`;
-    const fields = Object.keys(cards[0]);
+    const fields = ['columnName', 'cardText', 'votesNumber'];
     const json2Csv = new Parser({ fields });
-    const blob = new Blob([json2Csv.parse(cards)], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([json2Csv.parse(dataToCSV)], { type: 'text/csv;charset=utf-8;' });
     if (navigator.msSaveBlob) { // IE 10+
       navigator.msSaveBlob(blob, filename);
     } else {
@@ -103,7 +114,6 @@ class Retro extends Component {
                 TriggeringComponent={({ onClick }) => (
                   <IconButton
                     key="download"
-                    raised
                     size="big"
                     color="primary"
                     className={classes.exportButton}
@@ -158,11 +168,14 @@ class Retro extends Component {
 Retro.contextTypes = {
   socket: PropTypes.object.isRequired
 };
-
+Retro.defaultProps = {
+  shareId: '',
+  step: ''
+};
 Retro.propTypes = {
   // Values
-  shareId: PropTypes.string.isRequired,
-  step: PropTypes.string.isRequired,
+  shareId: PropTypes.string,
+  step: PropTypes.string,
   history: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({

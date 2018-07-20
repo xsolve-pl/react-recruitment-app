@@ -28,7 +28,7 @@ export const AppContainer = ({ store, ...rest }) => (
               dialogChildren={[
                 <ConnectingDialog key="connectingDialog" />,
                 <ChangeNameDialog key="changeNameDialog" />,
-                <GroupCardsDialog hey="groupCardsDialog" />,
+                <GroupCardsDialog key="groupCardsDialog" />,
                 <Notifications key="notifications" />
               ]}
             >

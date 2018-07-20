@@ -43,7 +43,7 @@ const styles = theme => ({
   exportButton: {
     position: 'fixed',
     right: 20,
-    bottom: 100,
+    bottom: 140,
     background: theme.palette.greyBlue,
     color: theme.palette.lightGrey
   }
