@@ -88,61 +88,80 @@ class Card extends Component {
     }
   };
 
+  handleDrop = (ev) => {
+    const { card, openGroupCardDialog } = this.props;
+    ev.stopPropagation();
+    const from = JSON.parse(ev.dataTransfer.getData('card'));
+    if (from.id !== card.id) openGroupCardDialog({ from, to: card });
+  };
+
+  handelDragStart = (ev) => {
+    const { card } = this.props;
+    const cardData = JSON.stringify(card);
+    ev.dataTransfer.setData('card', cardData);
+  };
+
   render() {
     const { userId, votes, userSubmmitedVotes, card, classes, removeCard, retroStep } = this.props;
     const { isEditing, text } = this.state;
     const { socket } = this.context;
     return (
-      <MaterialCard className={classes.card}>
-        <CardContent key="content">
-          {isEditing ? (
-            <TextField
-              multiline
-              autoFocus
-              margin="dense"
-              onChange={this.handleTextChange}
-              label={<FormattedMessage id="retro.add-card-label" />}
-              fullWidth
-              value={text}
-            />
-          ) : (
-            <Typography align="left" className={classes.text} onDoubleClick={this.startEditing}>
-              {card.text}
-            </Typography>
-          )}
-        </CardContent>
-        <CardActions key="actions" className={classes.cardActions}>
-          {(!isEditing) && card.authors.map(({ id, name }) => (
-            <Button key={id} size="small" className={classes.author}>{name}</Button>
-          ))}
-          <div className={classes.expander} />
-          {isEditing &&
+      <div
+        draggable={!isEditing}
+        onDragStart={this.handelDragStart}
+        onDragOver={e => e.preventDefault()}
+        onDrop={this.handleDrop}
+      >
+        <MaterialCard className={classes.card}>
+          <CardContent key="content">
+            {isEditing ? (
+              <TextField
+                multiline
+                autoFocus
+                margin="dense"
+                onChange={this.handleTextChange}
+                label={<FormattedMessage id="retro.add-card-label" />}
+                fullWidth
+                value={text}
+              />
+            ) : (
+              <Typography align="left" className={classes.text} onDoubleClick={this.startEditing}>
+                {card.text}
+              </Typography>
+            )}
+          </CardContent>
+          <CardActions key="actions" className={classes.cardActions}>
+            {(!isEditing) && card.authors.map(({ id, name }) => (
+              <Button key={id} size="small" className={classes.author}>{name}</Button>
+            ))}
+            <div className={classes.expander} />
+            {isEditing &&
             <IconButton key="done" className={classes.action} onClick={this.editCard}>
               <Done className={classes.doneIcon} />
             </IconButton>
-          }
-          {(!isEditing && (retroStep === 'write' || retroStep === 'closed')
-            && card.authors.find(({ id }) => id === userId)) && [
-              <IconButton key="edit" className={classes.action} onClick={this.startEditing}>
-                <EditIcon className={classes.editIcon} />
-              </IconButton>,
-              <ConfirmActionDialog
-                key="delete-confirm"
-                TriggeringComponent={({ onClick }) => (
-                  <IconButton
-                    key="delete"
-                    className={classes.action}
-                  >
-                    <DeleteIcon className={classes.delIcon} onClick={onClick} />
-                  </IconButton>
-                )
-                }
-                textContent={<FormattedMessage id="retro.confirm-delete-card" />}
-                onConfirm={() => removeCard(socket, card.id)}
-              />
-            ]}
-        </CardActions>
-        {retroStep === 'vote' &&
+            }
+            {(!isEditing && (retroStep === 'write' || retroStep === 'closed')
+              && card.authors.find(({ id }) => id === userId)) && [
+                <IconButton key="edit" className={classes.action} onClick={this.startEditing}>
+                  <EditIcon className={classes.editIcon} />
+                </IconButton>,
+                <ConfirmActionDialog
+                  key="delete-confirm"
+                  TriggeringComponent={({ onClick }) => (
+                    <IconButton
+                      key="delete"
+                      className={classes.action}
+                    >
+                      <DeleteIcon className={classes.delIcon} onClick={onClick} />
+                    </IconButton>
+                  )
+                  }
+                  textContent={<FormattedMessage id="retro.confirm-delete-card" />}
+                  onConfirm={() => removeCard(socket, card.id)}
+                />
+              ]}
+          </CardActions>
+          {retroStep === 'vote' &&
           <Votes
             key="votes"
             disabled={votes - userSubmmitedVotes <= 0}
@@ -151,7 +170,8 @@ class Card extends Component {
             addUserVote={this.addVote}
             removeUserVote={this.removeVote}
           />}
-      </MaterialCard>
+        </MaterialCard>
+      </div>
     );
   }
 }
@@ -173,6 +193,7 @@ Card.propTypes = {
     authors: PropTypes.arrayOf(PropTypes.object).isRequired
   }).isRequired,
   // Functions
+  openGroupCardDialog: PropTypes.func.isRequired,
   editCard: PropTypes.func.isRequired,
   removeCard: PropTypes.func.isRequired,
   addMessage: PropTypes.func.isRequired,

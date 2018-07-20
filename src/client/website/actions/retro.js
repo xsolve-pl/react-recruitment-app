@@ -22,6 +22,9 @@ export const RETRO_EDIT_IN_PROGRESS = 'RETRO_EDIT_IN_PROGRESS';
 export const RETRO_EDIT_SUCCESS = 'RETRO_EDIT_SUCCESS';
 export const RETRO_EDIT_FAILURE = 'RETRO_EDIT_FAILURE';
 
+export const RETRO_TOGGLE_SORT = 'RETRO_TOGGLE_SORT';
+export const RETRO_TOGGLE_COLUMN_HIDE = 'RETRO_TOGGLE_COLUMN_HIDE';
+export const RETRO_FILTER_CARDS = 'RETRO_FILTER_CARDS';
 
 export const setRetroIdQueryParameter = retroId => (dispatch) => {
   const query = { r: retroId };
