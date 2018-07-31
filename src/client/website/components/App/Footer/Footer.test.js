@@ -17,6 +17,6 @@ describe(`${Footer.name} component`, () => {
       <Footer {...mockProps} />,
     );
 
-    expect(wrapper.find('span')).to.have.length(1);
+    expect(wrapper.find('span')).to.have.length(2);
   });
 });
