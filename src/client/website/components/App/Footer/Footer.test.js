@@ -14,6 +14,6 @@ describe(`${Footer.name} component`, () => {
   it('renders without crashing', () => {
     const wrapper = enzyme.mount(<Footer {...mockProps} />);
 
-    expect(wrapper.find('span')).to.have.length(1);
+    expect(wrapper.find('span')).to.have.length(2);
   });
 });
