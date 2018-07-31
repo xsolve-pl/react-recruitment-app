@@ -4,8 +4,7 @@ import Footer from './Footer';
 import enzyme from '../../../services/test/enzymeWithProviders';
 
 const mockProps = {
-  changeLanguage: () => {
-  },
+  changeLanguage: () => {},
   classes: {
     footer: 'footer'
   }
@@ -13,10 +12,8 @@ const mockProps = {
 
 describe(`${Footer.name} component`, () => {
   it('renders without crashing', () => {
-    const wrapper = enzyme.mount(
-      <Footer {...mockProps} />,
-    );
+    const wrapper = enzyme.mount(<Footer {...mockProps} />);
 
-    expect(wrapper.find('span')).to.have.length(2);
+    expect(wrapper.find('span')).to.have.length(1);
   });
 });
