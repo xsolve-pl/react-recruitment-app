@@ -10,14 +10,16 @@ const mockProps = {
   classes: {
     app: 'app'
   },
-  changeLanguage: () => {
-  }
+  changeLanguage: () => {}
 };
 
 const mockContext = {
   socket: {},
   store: configureMockStore()({
-    user: {}
+    user: {},
+    retro: {
+      join: {}
+    }
   })
 };
 
