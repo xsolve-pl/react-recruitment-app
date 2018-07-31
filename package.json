@@ -28,7 +28,7 @@
       }
     },
     "test": {
-      "command": "node src/client/scripts/test --env=jsdom",
+      "command": "node src/client/scripts/testEnv --env=jsdom",
       "env": {
         "NODE_ENV": "test"
       }
